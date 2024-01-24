@@ -9,12 +9,14 @@ then
 fi
 
 DIR=$(dirname $1)
+
 if [ ! -d "$DIR" ]
 then
 	mkdir -p "$DIR"
 fi
 
 echo $2 > $1
+
 if [ $? -ne 0 ]
 then
 	echo "Failed to create file to write!"
