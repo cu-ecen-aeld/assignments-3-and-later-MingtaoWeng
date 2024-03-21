@@ -49,7 +49,6 @@ fi
 
 echo "Adding the Image in outdir"
 cp ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}
-#cp ${OUTDIR}/linux-stable/arch/${ARCH}/boot/dts/versatile-pb.dtb ${OUTDIR}
 
 echo "Creating the staging directory for the root filesystem"
 cd "$OUTDIR"
@@ -86,7 +85,7 @@ echo "Installing busybox"
 make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
 
 cd ${OUTDIR}/rootfs
-echo "Library dependencies"
+echo "Library dependencies:"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 
@@ -94,13 +93,13 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 export SYSROOT=$(${CROSS_COMPILE}gcc -print-sysroot)
 cd ${OUTDIR}/rootfs
 cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 lib
-cp -a ${SYSROOT}/lib64/ld-2.31.so lib64
+cp -a ${SYSROOT}/lib64/ld-2.33.so lib64
 cp -a ${SYSROOT}/lib64/libm.so.6 lib64
-cp -a ${SYSROOT}/lib64/libm-2.31.so lib64
+cp -a ${SYSROOT}/lib64/libm-2.33.so lib64
 cp -a ${SYSROOT}/lib64/libresolv.so.2 lib64
-cp -a ${SYSROOT}/lib64/libresolv-2.31.so lib64
+cp -a ${SYSROOT}/lib64/libresolv-2.33.so lib64
 cp -a ${SYSROOT}/lib64/libc.so.6 lib64
-cp -a ${SYSROOT}/lib64/libc-2.31.so lib64
+cp -a ${SYSROOT}/lib64/libc-2.33.so lib64
 
 # Make device nodes
 sudo mknod -m 666 dev/null c 1 3
@@ -126,5 +125,5 @@ sudo chown -R root:root *
 # Create initramfs.cpio.gz
 find . | cpio -H newc -ov --owner root:root > ../initramfs.cpio
 cd ..
-gzip initramfs.cpio
+gzip -f initramfs.cpio
 
