@@ -9,6 +9,8 @@ CFLAGS=
 $(APP_NAME): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
+all: $(APP_NAME)
+
 clean:
 	rm -f $(OBJ) $(APP_NAME) 
 
